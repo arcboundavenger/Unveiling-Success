@@ -3,7 +3,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 # 读取 Excel 文件
-file_path = 'Steam_Twitch_Metacritic_2024.xlsx'
+file_path = 'Steam_Twitch_Metacritic_games.xlsx'
 df = pd.read_excel(file_path, sheet_name='Steam Games Raw')
 
 # 选取所需列

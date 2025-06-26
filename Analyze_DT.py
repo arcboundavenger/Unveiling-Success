@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # 读取数据
-data = pd.read_excel('Steam_Twitch_Metacritic_2024.xlsx', sheet_name='Steam Games 2024')
+data = pd.read_excel('Steam_Twitch_Metacritic_games.xlsx', sheet_name='Steam Games')
 
 # 选择目标变量和特征
 y = data['LnRevenue']
@@ -19,7 +19,7 @@ X = X.apply(pd.to_numeric, errors='coerce')
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
 
 # 创建并训练模型（使用默认参数）
-model = DecisionTreeRegressor(random_state=42)
+model = DecisionTreeRegressor()
 model.fit(X_train, y_train)
 
 # 预测

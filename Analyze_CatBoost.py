@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # 读取数据
-data = pd.read_excel('Steam_Twitch_Metacritic_2024.xlsx', sheet_name='Steam Games 2024')
+data = pd.read_excel('Steam_Twitch_Metacritic_games.xlsx', sheet_name='Steam Games')
 
 # 选择目标变量和特征
 y = data['LnRevenue']

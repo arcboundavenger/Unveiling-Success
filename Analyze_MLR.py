@@ -7,7 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # 读取数据
-data = pd.read_excel('Steam_Twitch_Metacritic_2024.xlsx', sheet_name='Steam Games 2024')
+data = pd.read_excel('Steam_Twitch_Metacritic_games.xlsx', sheet_name='Steam Games')
 
 # 处理缺失值和无穷大
 data.replace([float('inf'), float('-inf')], pd.NA, inplace=True)
