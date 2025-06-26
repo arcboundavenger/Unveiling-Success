@@ -1,12 +1,12 @@
 import pandas as pd
-from sklearn.tree import DecisionTreeRegressor
+from catboost import CatBoostRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
 import numpy as np
 import matplotlib.pyplot as plt
 
 # 读取数据
-data = pd.read_excel('Steam Games 2024_Filled with MC and Twitch_used for Analysis.xlsx', sheet_name='Steam Games 2024')
+data = pd.read_excel('Steam_Twitch_Metacritic_2024.xlsx', sheet_name='Steam Games 2024')
 
 # 选择目标变量和特征
 y = data['LnRevenue']
@@ -19,7 +19,7 @@ X = X.apply(pd.to_numeric, errors='coerce')
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
 
 # 创建并训练模型（使用默认参数）
-model = DecisionTreeRegressor(random_state=42)
+model = CatBoostRegressor(silent=True)  # silent=True 以禁止训练时的输出
 model.fit(X_train, y_train)
 
 # 预测
@@ -71,20 +71,12 @@ for ax in axs:
 plt.tight_layout()
 plt.show()
 
-# 计算特征重要性
-importances = model.feature_importances_
-indices = np.argsort(importances)[::-1]  # 降序索引
+# 绘制特征的重要性
+feature_importances = model.get_feature_importance()
+sorted_indices = np.argsort(feature_importances)  # 从小到大排序
 
-# 创建特征重要性图，横向条形图
-plt.figure(figsize=(10, 6))
+# 画图
+plt.barh(range(len(feature_importances)), feature_importances[sorted_indices])
+plt.yticks(range(len(feature_importances)), X.columns[sorted_indices])  # 根据排序后的索引调整特征名称
 plt.title('Feature Importance')
-plt.barh(range(X.shape[1]), importances[indices], align='center')
-plt.yticks(range(X.shape[1]), [X.columns[i] for i in indices])
-plt.xlim([0, importances.max() + 0.05])  # 添加一点额外空间在右侧
-plt.xlabel('Importance')
-plt.ylabel('Features')
-
-# 颠倒y轴顺序
-plt.gca().invert_yaxis()  # 这里颠倒y轴，使得最重要的特征在顶部
-
 plt.show()

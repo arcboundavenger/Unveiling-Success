@@ -1,12 +1,12 @@
 import pandas as pd
-from catboost import CatBoostRegressor
+from lightgbm import LGBMRegressor, plot_importance
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score, mean_squared_error, mean_absolute_error
 import numpy as np
 import matplotlib.pyplot as plt
 
 # 读取数据
-data = pd.read_excel('Steam Games 2024_Filled with MC and Twitch_used for Analysis.xlsx', sheet_name='Steam Games 2024')
+data = pd.read_excel('Steam_Twitch_Metacritic_2024.xlsx', sheet_name='Steam Games 2024')
 
 # 选择目标变量和特征
 y = data['LnRevenue']
@@ -19,7 +19,7 @@ X = X.apply(pd.to_numeric, errors='coerce')
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
 
 # 创建并训练模型（使用默认参数）
-model = CatBoostRegressor(silent=True)  # silent=True 以禁止训练时的输出
+model = LGBMRegressor()
 model.fit(X_train, y_train)
 
 # 预测
@@ -72,11 +72,6 @@ plt.tight_layout()
 plt.show()
 
 # 绘制特征的重要性
-feature_importances = model.get_feature_importance()
-sorted_indices = np.argsort(feature_importances)  # 从小到大排序
-
-# 画图
-plt.barh(range(len(feature_importances)), feature_importances[sorted_indices])
-plt.yticks(range(len(feature_importances)), X.columns[sorted_indices])  # 根据排序后的索引调整特征名称
+plot_importance(model, importance_type='split')
 plt.title('Feature Importance')
 plt.show()
